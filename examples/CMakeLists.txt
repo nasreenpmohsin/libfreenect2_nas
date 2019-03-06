@@ -24,6 +24,9 @@ SET(flextGL_SOURCES ${freenect2_ROOT_DIR}/src/flextGL.cpp)
 SET(flextGL_INCLUDE_DIRS ${freenect2_ROOT_DIR}/src) # for flextGL.h
 
 FIND_PACKAGE(PkgConfig)    # try find PKGConfig as it will be used if found
+FIND_PACKAGE(OpenCV 3 REQUIRED)
+FIND_PACKAGE(PCL 1.8 REQUIRED)
+
 LIST(APPEND CMAKE_MODULE_PATH ${freenect2_ROOT_DIR}/cmake_modules) # FindGLFW3.cmake
 
 IF(TARGET freenect2)
@@ -37,15 +40,25 @@ ENDIF()
 
 INCLUDE_DIRECTORIES(
   ${freenect2_INCLUDE_DIR}
+   ${OpenCV_INCLUDE_DIRS}
+        ${PCL_INCLUDE_DIRS}
 )
+LINK_DIRECTORIES(
+        ${PCL_LIBRARY_DIRS})
 
 SET(Protonect_src
-  Protonect.cpp
-)
+        #Protonect.cpp
+  #Protonect_old_version.cpp
+        DataLoggingMATLAB.cpp)
 
 SET(Protonect_LIBRARIES
   ${freenect2_LIBRARIES}
+  ${OpenCV_LIBS}
+  ${OpenCV_LIBRARIES}
+        ${PCL_LIBRARIES}
 )
+
+ADD_DEFINITIONS(${PCL_DEFINITIONS})
 
 SET(Protonect_DLLS
   ${freenect2_DLLS}
@@ -63,6 +76,7 @@ IF(ENABLE_OPENGL)
     LIST(APPEND Protonect_DLLS ${GLFW3_DLL})
     LIST(APPEND Protonect_src
       viewer.cpp
+      functions_kinect.cpp
       ${flextGL_SOURCES}
     )
     LIST(APPEND Protonect_LIBRARIES

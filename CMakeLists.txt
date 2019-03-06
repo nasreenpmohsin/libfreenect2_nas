@@ -332,7 +332,7 @@ IF(ENABLE_OPENCL)
     # The workaround of disabling exceptions can only be set up during compile time.
     # Diabling it for all should be harmless. The flag is the same for GCC/Clang/ICC.
     IF(UNIX AND NOT APPLE)
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions") #-fno-exceptions
     ENDIF()
   ENDIF(OpenCL_FOUND)
 ENDIF(ENABLE_OPENCL)
